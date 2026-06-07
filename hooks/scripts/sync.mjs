@@ -82,13 +82,19 @@ try {
     chmodSync(toolPath, 0o755)
   }
 
-  // Write MCP config
-  if (data.mcpServers && Object.keys(data.mcpServers).length > 0) {
-    writeFileSync(
-      join(PLUGIN_ROOT, '.mcp.json'),
-      JSON.stringify({ mcpServers: data.mcpServers }, null, 2)
-    )
+  // Write MCP config — include org-context server with API key baked in
+  const mcpServers = {
+    'org-context': {
+      type: 'http',
+      url: API_URL.replace('/api', '/mcp'),
+      headers: { 'x-api-key': API_KEY },
+    },
+    ...(data.mcpServers || {}),
   }
+  writeFileSync(
+    join(PLUGIN_ROOT, '.mcp.json'),
+    JSON.stringify({ mcpServers }, null, 2)
+  )
 
   const cliCount = (data.cliTools || []).length
   const mcpCount = Object.keys(data.mcpServers || {}).length

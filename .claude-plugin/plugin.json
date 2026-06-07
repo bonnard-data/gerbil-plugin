@@ -15,12 +15,5 @@
       "sensitive": false,
       "required": true
     }
-  },
-  "mcpServers": {
-    "org-context": {
-      "type": "http",
-      "url": "http://localhost:3000/mcp",
-      "headersHelper": "${CLAUDE_PLUGIN_ROOT}/bin/oc-mcp-headers"
-    }
   }
 }
