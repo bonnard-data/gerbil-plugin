@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "{\"Authorization\": \"Bearer ${CLAUDE_PLUGIN_OPTION_SYNCTOKEN}\"}"
