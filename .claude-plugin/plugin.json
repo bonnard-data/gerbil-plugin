@@ -16,5 +16,13 @@
       "required": true
     }
   },
-  "mcpServers": "./.mcp.json"
+  "mcpServers": {
+    "org-context": {
+      "type": "http",
+      "url": "http://localhost:3000/mcp",
+      "headers": {
+        "x-api-key": "${user_config.apiKey}"
+      }
+    }
+  }
 }
