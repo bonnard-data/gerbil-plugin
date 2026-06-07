@@ -13,9 +13,10 @@ const SYNC_TOKEN = process.env.CLAUDE_PLUGIN_OPTION_SYNC_TOKEN
   || process.env.CLAUDE_PLUGIN_OPTION_syncToken
   || ''
 
-// Debug: log available plugin env vars
-const pluginVars = Object.entries(process.env).filter(([k]) => k.startsWith('CLAUDE_PLUGIN'))
-process.stderr.write(`[sync] Plugin env vars: ${JSON.stringify(pluginVars.map(([k,v]) => k))}\n`)
+// Debug: dump plugin env vars to file for inspection
+const pluginVars = Object.entries(process.env).filter(([k]) => k.startsWith('CLAUDE'))
+const debugPath = join(HOME, '.plugin-builder-debug.json')
+writeFileSync(debugPath, JSON.stringify(Object.fromEntries(pluginVars), null, 2))
 
 function safeName(name) {
   return name.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 100)
