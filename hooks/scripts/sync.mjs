@@ -52,8 +52,11 @@ try {
     writeFileSync(join(dir, 'SKILL.md'), skill.content)
   }
 
-  // Write rules
-  const rulesDir = join(HOME, '.claude', 'rules')
+  // Write rules to project scope if available, otherwise global
+  const projectDir = process.env.CLAUDE_PROJECT_DIR
+  const rulesDir = projectDir
+    ? join(projectDir, '.claude', 'rules')
+    : join(HOME, '.claude', 'rules')
   mkdirSync(rulesDir, { recursive: true })
   for (const rule of data.rules || []) {
     writeFileSync(join(rulesDir, `${safeName(rule.name)}.md`), rule.content)
