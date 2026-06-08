@@ -68,6 +68,54 @@ try {
     writeFileSync(join(rulesDir, `oc-${safeName(rule.name)}.md`), rule.content)
   }
 
+  // Write static agent guide rule
+  const skillNames = (data.skills || []).map(s => s.name)
+  writeFileSync(join(rulesDir, 'oc-agent-guide.md'), `# Org Context
+
+You have the Org Context plugin installed. It provides your organization's knowledge, standards, and tools.
+
+## What you have
+
+- **Skills** (slash commands): ${skillNames.length ? skillNames.map(n => '/' + safeName(n)).join(', ') : 'none synced'}
+- **Rules** (always-on context): ${(data.rules || []).length} org rules loaded — follow them
+- **MCP tools**: Use \`search_docs\` to search company documentation, \`list_docs\` to browse available docs
+- **CLI** (\`oc\`): Admin tool for managing org content
+
+## CLI reference
+
+\`\`\`
+oc whoami                              # Current user info
+oc sync                                # Sync status
+
+oc skill list|get|create|update|delete # Manage skills
+oc rule  list|get|create|update|delete # Manage rules
+oc doc   list|get|create|update|delete|search # Manage docs
+
+oc skill template / oc rule template / oc doc template  # Show example content
+
+oc teams   list|get|create|delete|add-member|rm-member
+oc members list|invite|set-role|remove
+\`\`\`
+
+Flags: \`--json\` for machine-readable output, \`--file <path>\` for content, \`--tags a,b\`, \`--org-wide\`, \`--description "..."\`
+
+## Content types
+
+**Skills** — On-demand procedures invoked via slash command. Write as step-by-step instructions the agent should follow. Markdown with headers, lists, code blocks. One focused task per skill.
+
+**Rules** — Always-on context injected into every session. Keep short and directive: "Always...", "Never...", "Prefer...". Plain markdown, no frontmatter.
+
+**Docs** — Searchable knowledge (architecture, schemas, runbooks). Title and description are separate fields; content is just the body in markdown. Found via \`search_docs\` MCP tool.
+
+## When to use what
+
+- Need company knowledge? → \`search_docs\` MCP tool
+- Need to see what's available? → \`oc doc list\`, \`oc skill list\`
+- Need to create/edit content? → Write content to a temp file, then \`oc <type> create "Name" --file /tmp/content.md\`
+- User asks about their setup? → \`oc whoami\`, \`oc teams list\`
+- Need a content example? → \`oc skill template\`, \`oc rule template\`, \`oc doc template\`
+`)
+
   // Write CLI tools to bin/
   const binDir = join(PLUGIN_ROOT, 'bin')
   mkdirSync(binDir, { recursive: true })

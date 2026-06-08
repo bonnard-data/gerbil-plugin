@@ -210,6 +210,69 @@ registerCrud('skill', { plural: 'skills', nameField: 'name', hasDescription: tru
 registerCrud('rule', { plural: 'rules', nameField: 'name' })
 registerCrud('doc', { plural: 'docs', nameField: 'title', hasDescription: true, hasSearch: true })
 
+// --- Templates ---
+
+commands['skill template'] = async () => {
+  console.log(`# Deploy Checklist
+
+A step-by-step procedure the agent follows when the user invokes this skill.
+
+## Steps
+
+1. Check all tests pass
+2. Review uncommitted changes
+3. Verify environment variables
+4. Run the deploy script
+
+## Notes
+
+- Skills are on-demand — loaded only when the user invokes the slash command
+- Write as instructions the AI agent should follow
+- Use markdown headers, lists, and code blocks
+- Keep focused on one task or workflow`)
+}
+
+commands['rule template'] = async () => {
+  console.log(`Always write tests for new functions. Use the project's existing test framework.
+Prefer integration tests over unit tests for database operations.
+Never mock external services in integration tests.
+
+---
+
+Rules are always-on context injected into every AI session.
+Keep them short and direct — the agent reads them on every prompt.
+Write as instructions: "Always...", "Never...", "Prefer..."
+No frontmatter needed — just plain markdown.`)
+}
+
+commands['doc template'] = async () => {
+  console.log(`# Architecture Overview
+
+High-level description of what this document covers.
+
+## Services
+
+- **backend** — Core platform API (Node.js, PostgreSQL)
+- **worker** — Background job processor (Redis queues)
+- **frontend** — React SPA served via CDN
+
+## Database
+
+PostgreSQL 15 with read replicas. Schema managed via Drizzle ORM.
+
+## Key Decisions
+
+- Event-driven architecture for cross-service communication
+- All secrets in Vault, never in env files
+
+---
+
+Docs are searchable knowledge — architecture, schemas, runbooks, processes.
+The agent finds them via the search_docs MCP tool.
+Write for an engineer who needs context, not step-by-step instructions (that's a skill).
+Title and description are separate fields — the content is just the body.`)
+}
+
 // --- Teams ---
 
 commands['teams list'] = async () => {
@@ -321,9 +384,9 @@ commands.help = async () => {
   console.log('  sync                            Show sync status')
   console.log('')
   console.log(bold('Content:'))
-  console.log('  skill  list|get|create|update|delete')
-  console.log('  rule   list|get|create|update|delete')
-  console.log('  doc    list|get|create|update|delete|search')
+  console.log('  skill  list|get|create|update|delete|template')
+  console.log('  rule   list|get|create|update|delete|template')
+  console.log('  doc    list|get|create|update|delete|search|template')
   console.log('')
   console.log(bold('Organization:'))
   console.log('  teams   list|get|create|delete|add-member|rm-member')
