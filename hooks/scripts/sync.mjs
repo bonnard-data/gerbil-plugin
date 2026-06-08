@@ -28,6 +28,7 @@ if (!API_KEY) {
 
 // Export env vars to all Bash tool calls for this session
 const envFile = process.env.CLAUDE_ENV_FILE
+process.stderr.write(`[oc-debug] CLAUDE_ENV_FILE=${envFile || 'NOT SET'}\n`)
 if (envFile) {
   appendFileSync(envFile, `export CLAUDE_PLUGIN_OPTION_APIKEY="${API_KEY}"\n`)
   appendFileSync(envFile, `export ORG_CONTEXT_API="${API_URL}"\n`)
