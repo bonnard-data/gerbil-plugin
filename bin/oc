@@ -127,6 +127,16 @@ function registerCrud(domain, { plural, nameField, hasDescription, hasSearch }) 
   async function resolveId(identifier) {
     if (identifier.match(/^[0-9a-f]{8}-/)) return identifier
     const items = await api('GET', `/${p}`)
+    // Try ID prefix match first (supports truncated IDs from list output)
+    if (identifier.match(/^[0-9a-f]{6,}$/)) {
+      const prefixMatches = items.filter(i => i.id.startsWith(identifier))
+      if (prefixMatches.length === 1) return prefixMatches[0].id
+      if (prefixMatches.length > 1) {
+        const list = prefixMatches.map(m => `  ${m.id}  ${m[nameField]}`).join('\n')
+        die(`Multiple ${p} match prefix "${identifier}". Use a longer ID:\n${list}`)
+      }
+    }
+    // Fall back to name match
     const matches = items.filter(i => i[nameField]?.toLowerCase() === identifier.toLowerCase())
     if (matches.length === 0) die(`No ${domain} found matching "${identifier}"`)
     if (matches.length > 1) {
@@ -292,6 +302,10 @@ Title and description are separate fields — the content is just the body.`)
 async function resolveTeamId(identifier) {
   if (identifier.match(/^[0-9a-f]{8}-/)) return identifier
   const teams = await api('GET', '/teams')
+  if (identifier.match(/^[0-9a-f]{6,}$/)) {
+    const prefixMatches = teams.filter(t => t.id.startsWith(identifier))
+    if (prefixMatches.length === 1) return prefixMatches[0].id
+  }
   const matches = teams.filter(t => t.name?.toLowerCase() === identifier.toLowerCase())
   if (matches.length === 0) die(`No team found matching "${identifier}"`)
   if (matches.length > 1) {
