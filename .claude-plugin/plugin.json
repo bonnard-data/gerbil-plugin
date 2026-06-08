@@ -11,7 +11,7 @@
     "apiKey": {
       "type": "string",
       "title": "API Key",
-      "description": "Your Org Context API key. Generate one from the Install page in the dashboard.",
+      "description": "Your Org Context API key. Generate one at http://localhost:3000/api-keys or from the API Keys page in the dashboard.",
       "sensitive": false,
       "required": true
     }
