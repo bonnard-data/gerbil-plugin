@@ -1,12 +1,12 @@
 ---
-description: Show sync status — skills, rules, teams, and MCPs for current user
-allowed-tools: Bash("${CLAUDE_PLUGIN_ROOT}/bin/oc":*)
+description: Re-sync skills, rules, and docs from the server
+allowed-tools: Bash(oc:*)
 ---
 
 Run the sync command and report the results:
 
 ```bash
-"${CLAUDE_PLUGIN_ROOT}/bin/oc" sync
+oc sync
 ```
 
 After reporting the results, tell the user:

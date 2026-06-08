@@ -11,7 +11,7 @@
     "apiKey": {
       "type": "string",
       "title": "API Key",
-      "description": "Your Org Context API key. Generate one at http://localhost:3000/api-keys or from the API Keys page in the dashboard.",
+      "description": "Your Org Context API key. Generate one at https://api-production-746a.up.railway.app/api-keys or from the API Keys page in the dashboard.",
       "sensitive": false,
       "required": true
     }
@@ -19,7 +19,7 @@
   "mcpServers": {
     "org-context": {
       "type": "http",
-      "url": "http://localhost:3000/mcp",
+      "url": "https://api-production-746a.up.railway.app/mcp",
       "headers": {
         "x-api-key": "${user_config.apiKey}"
       }

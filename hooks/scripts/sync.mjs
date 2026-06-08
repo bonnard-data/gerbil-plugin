@@ -6,7 +6,7 @@ import { homedir } from 'node:os'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || join(__dirname, '..', '..')
-const API_URL = process.env.ORG_CONTEXT_API || 'http://localhost:3000/api'
+const API_URL = process.env.ORG_CONTEXT_API || 'https://api-production-746a.up.railway.app/api'
 const HOME = process.env.HOME || homedir()
 const API_KEY = process.env.CLAUDE_PLUGIN_OPTION_APIKEY || ''
 
