@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { mkdirSync, writeFileSync, readdirSync, rmSync, readFileSync, chmodSync } from 'node:fs'
+import { mkdirSync, writeFileSync, readdirSync, rmSync, readFileSync, chmodSync, appendFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { homedir } from 'node:os'
@@ -24,6 +24,13 @@ if (!API_KEY) {
   }
   process.stdout.write(JSON.stringify(output))
   process.exit(0)
+}
+
+// Export env vars to all Bash tool calls for this session
+const envFile = process.env.CLAUDE_ENV_FILE
+if (envFile) {
+  appendFileSync(envFile, `export CLAUDE_PLUGIN_OPTION_APIKEY="${API_KEY}"\n`)
+  appendFileSync(envFile, `export ORG_CONTEXT_API="${API_URL}"\n`)
 }
 
 try {
@@ -146,11 +153,16 @@ Flags: \`--json\` for machine-readable output, \`--file <path>\` for content, \`
 
   const cliCount = (data.cliTools || []).length
   const mcpCount = Object.keys(data.mcpServers || {}).length
+  const skillList = skillNames.length ? skillNames.map(n => '/' + safeName(n)).join(', ') : 'none'
   const output = {
     hookSpecificOutput: {
       hookEventName: 'SessionStart',
       reloadSkills: true,
-      additionalContext: `[Org Context] Synced for ${data.email} (teams: ${(data.teams || []).join(', ') || 'none'}). ${(data.skills || []).length} skills, ${(data.rules || []).length} rules, ${cliCount} CLI tools, ${mcpCount} MCPs.`
+      additionalContext: `[Org Context] Synced for ${data.email} (teams: ${(data.teams || []).join(', ') || 'none'}). ${(data.skills || []).length} skills, ${(data.rules || []).length} rules, ${cliCount} CLI tools, ${mcpCount} MCPs.
+
+Available skills: ${skillList}
+MCP tools: search_docs, list_docs, list_alerts, acknowledge_alert
+CLI (oc): whoami, sync, skill list|get|create|update|delete|template, rule list|get|create|update|delete|template, doc list|get|create|update|delete|search|template, teams list|get|create|delete|add-member|rm-member, members list|invite|set-role|remove. Use --json for structured output, --file <path> for content.`
     }
   }
   process.stdout.write(JSON.stringify(output))
