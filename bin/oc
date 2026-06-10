@@ -13,7 +13,7 @@ function loadApiKey() {
 }
 
 const API_KEY = loadApiKey()
-const API_URL = process.env.ORG_CONTEXT_API || 'https://api-production-746a.up.railway.app/api'
+const API_URL = process.env.ORG_CONTEXT_API || 'https://app.gerbil.dev/api'
 const JSON_OUTPUT = process.argv.includes('--json')
 
 // ANSI colors

@@ -2,7 +2,7 @@
   "mcpServers": {
     "org-context": {
       "type": "http",
-      "url": "http://localhost:3000/mcp",
+      "url": "https://app.gerbil.dev/mcp",
       "headers": {
         "x-api-key": "ocWIUAwLiKkjrvnTFgnxcFMfbseLeyxAmFtmulQwVQzKOLrqhQBTRWQfREtMXQXiZg"
       }
